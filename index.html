@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Summa Logica</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link src="http://code.jquery.com/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></link>
+
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" sizes="16x16">
+
+    <style>
+        body {
+            background-color: white;
+        }
+
+        canvas {
+            width: 600px;
+            height: 200px;
+            border: 5px solid #000000
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">Summ Logica</h1>
+        <p class="lead">Propositional Logic at your fingertips</p>
+        <hr class="my-4">
+        <p>Contruct Logical Arguments Here!</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+        </p>
+    </div>
+    <h1>State your Argument Here!</h1>
+
+    <form>
+        <div class="form-group">
+            <label for="premiseInput">Premise</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">All Donuts are Tasty.</small>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        <button type="submit" class="btn btn-secondary">Submit</button>
+    </form>
+
+    <input type="checkbox" id="r">Red Circle
+    <br>
+    <input type="checkbox" id="y">Yellow Circle
+    <br>
+    <input type="checkbox" id="b">Blue Circle
+    <br>
+    <input type="checkbox" id="by">Blue+Yellow
+    <br>
+    <input type="checkbox" id="br">Blue+Red
+    <br>
+    <input type="checkbox" id="yr">Yellow+Red
+    <br>
+    <input type="checkbox" id="byNotR">Blue+Yellow-Red
+    <br>
+    <input type="checkbox" id="brNotY">Blue+Red-Yellow
+    <br>
+    <input type="checkbox" id="yrNotB">Yellow+Red-Blue
+    <br>
+    <input type="checkbox" id="yrb">Yellow+Red+Blue
+    <br>
+
+    <div id="argumentOutput">
+
+        <canvas id="canvas"></canvas>
+
+        <div id="venns">
+            <script>
+                //var c = document.getElementById("vennCanvas");
+                // var ctx = c.getContext("2d");
+                // ctx.beginPath();
+                // ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+                // ctx.stroke();
+            </script>
+
+            <script>
+
+                $(function () {
+
+                    var canvas = document.getElementById("canvas");
+                    var ctx = canvas.getContext("2d");
+                    var canvas1 = document.createElement("canvas");
+                    var ctx1 = canvas1.getContext("2d");
+
+                    var circleBlue = {
+                        x: 50,
+                        y: 50,
+                        r: 40
+                    };
+                    var circleYellow = {
+                        x: 100,
+                        y: 50,
+                        r: 40
+                    };
+                    var circleRed = {
+                        x: 75,
+                        y: 85,
+                        r: 40
+                    };
+
+                    drawCircle(ctx, circleRed, "salmon");
+                    drawCircle(ctx, circleYellow, "lemonchiffon");
+                    drawCircle(ctx, circleBlue, "lightblue");
+
+                    $r = $("#r")[0];
+                    $y = $("#y")[0];
+                    $b = $("#b")[0];
+                    $by = $("#by")[0];
+                    $br = $("#br")[0];
+                    $yr = $("#yr")[0];
+                    $byNotR = $("#byNotR")[0];
+                    $brNotY = $("#brNotY")[0];
+                    $yrNotB = $("#yrNotB")[0];
+                    $yrb = $("#yrb")[0];
+                    $r.checked = true;
+                    $y.checked = true;
+                    $b.checked = true;
+
+                    $(":checkbox").change(function () {
+                        drawAll()
+                    });
+
+                    function drawIntersect(a, b, c, notC, color) {
+
+                        ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+
+                        ctx1.save();
+
+                        // a
+                        drawCircle(ctx1, a, color);
+                        // b
+                        ctx1.globalCompositeOperation = "source-in";
+                        drawCircle(ctx1, b, color);
+                        // c
+                        if (c) {
+                            drawCircle(ctx1, c, color);
+                        }
+                        // notC
+                        ctx1.globalCompositeOperation = "destination-out";
+                        if (notC) {
+                            drawCircle(ctx1, notC, color);
+                        }
+
+                        ctx1.restore();
+
+                        ctx.drawImage(canvas1, 0, 0);
+
+                    }
+
+                    function drawCircle(ctx, circle, color) {
+                        ctx.beginPath();
+                        ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+                        ctx.closePath();
+                        ctx.fillStyle = color;
+                        ctx.fill();
+                    }
+
+                    function drawAll() {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        if ($r.checked) {
+                            drawCircle(ctx, circleRed, "salmon");
+                        }
+                        if ($y.checked) {
+                            drawCircle(ctx, circleYellow, "lemonchiffon");
+                        }
+                        if ($b.checked) {
+                            drawCircle(ctx, circleBlue, "lightblue");
+                        }
+                        if ($by.checked) {
+                            drawIntersect(circleBlue, circleYellow, null, null, "green");
+                        }
+                        if ($br.checked) {
+                            drawIntersect(circleBlue, circleRed, null, null, "blue");
+                        }
+                        if ($yr.checked) {
+                            drawIntersect(circleYellow, circleRed, null, null, "red");
+                        }
+                        if ($byNotR.checked) {
+                            drawIntersect(circleBlue, circleYellow, null, circleRed, "green");
+                        }
+                        if ($brNotY.checked) {
+                            drawIntersect(circleBlue, circleRed, null, circleYellow, "blue");
+                        }
+                        if ($yrNotB.checked) {
+                            drawIntersect(circleYellow, circleRed, null, circleBlue, "red");
+                        }
+                        if ($yrb.checked) {
+                            drawIntersect(circleYellow, circleRed, circleBlue, null, "black");
+                        }
+                    }
+
+                }); // end $(function(){});
+            </script>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>
