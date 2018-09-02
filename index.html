@@ -11,23 +11,16 @@
         crossorigin="anonymous">
     <script src="http://code.jquery.com/jquery.min.js" crossorigin="anonymous"></script>
 
-    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" sizes="16x16">
+    <link rel="icon" href="public/assets/images/favicon.ico" type="image/x-icon" sizes="16x16">
+<link rel="stylesheet" href="public/assets/css/index.css">
 
-    <style>
-        body {
-            background-color: white;
-        }
-
-        canvas {
-            width: 600px;
-            height: 200px;
-            border: 5px solid #000000
-        }
-    </style>
 
 </head>
 
 <body>
+    <container>
+        <!--start jumbotron row-->
+        <div class="row">
     <div class="jumbotron">
         <h1 class="display-4">Summa Logica</h1>
         <p class="lead">Propositional Logic at your fingertips</p>
@@ -37,6 +30,11 @@
             <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
         </p>
     </div>
+    </div> <!--end jumbotron row-->
+    <!--start contents row-->
+    <div class="row">
+        <div class="col">
+            <!--start form col-->
     <h1>State your Argument Here!</h1>
 
     <form>
@@ -55,7 +53,10 @@
         </div>
         <button type="submit" class="btn btn-secondary">Submit</button>
     </form>
+    </div> <!--end form col-->
 
+    <!--start venn col-->
+    <div class="col">
     <input type="checkbox" id="r">Red Circle
     <br>
     <input type="checkbox" id="y">Yellow Circle
@@ -82,137 +83,13 @@
         <canvas id="canvas"></canvas>
 
         <div id="venns">
-            <script>
-                //var c = document.getElementById("vennCanvas");
-                // var ctx = c.getContext("2d");
-                // ctx.beginPath();
-                // ctx.arc(100, 75, 50, 0, 2 * Math.PI);
-                // ctx.stroke();
-            </script>
 
-            <script>
-
-                $(function () {
-
-                    var canvas = document.getElementById("canvas");
-                    var ctx = canvas.getContext("2d");
-                    var canvas1 = document.createElement("canvas");
-                    var ctx1 = canvas1.getContext("2d");
-
-                    var circleBlue = {
-                        x: 50,
-                        y: 50,
-                        r: 40
-                    };
-                    var circleYellow = {
-                        x: 100,
-                        y: 50,
-                        r: 40
-                    };
-                    var circleRed = {
-                        x: 75,
-                        y: 85,
-                        r: 40
-                    };
-
-                    drawCircle(ctx, circleRed, "salmon");
-                    drawCircle(ctx, circleYellow, "lemonchiffon");
-                    drawCircle(ctx, circleBlue, "lightblue");
-
-                    $r = $("#r")[0];
-                    $y = $("#y")[0];
-                    $b = $("#b")[0];
-                    $by = $("#by")[0];
-                    $br = $("#br")[0];
-                    $yr = $("#yr")[0];
-                    $byNotR = $("#byNotR")[0];
-                    $brNotY = $("#brNotY")[0];
-                    $yrNotB = $("#yrNotB")[0];
-                    $yrb = $("#yrb")[0];
-                    $r.checked = true;
-                    $y.checked = true;
-                    $b.checked = true;
-
-                    $(":checkbox").change(function () {
-                        drawAll()
-                    });
-
-                    function drawIntersect(a, b, c, notC, color) {
-
-                        ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
-
-                        ctx1.save();
-
-                        // a
-                        drawCircle(ctx1, a, color);
-                        // b
-                        ctx1.globalCompositeOperation = "source-in";
-                        drawCircle(ctx1, b, color);
-                        // c
-                        if (c) {
-                            drawCircle(ctx1, c, color);
-                        }
-                        // notC
-                        ctx1.globalCompositeOperation = "destination-out";
-                        if (notC) {
-                            drawCircle(ctx1, notC, color);
-                        }
-
-                        ctx1.restore();
-
-                        ctx.drawImage(canvas1, 0, 0);
-
-                    }
-
-                    function drawCircle(ctx, circle, color) {
-                        ctx.beginPath();
-                        ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
-                        ctx.closePath();
-                        ctx.fillStyle = color;
-                        ctx.fill();
-                    }
-
-                    function drawAll() {
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        if ($r.checked) {
-                            drawCircle(ctx, circleRed, "salmon");
-                        }
-                        if ($y.checked) {
-                            drawCircle(ctx, circleYellow, "lemonchiffon");
-                        }
-                        if ($b.checked) {
-                            drawCircle(ctx, circleBlue, "lightblue");
-                        }
-                        if ($by.checked) {
-                            drawIntersect(circleBlue, circleYellow, null, null, "green");
-                        }
-                        if ($br.checked) {
-                            drawIntersect(circleBlue, circleRed, null, null, "blue");
-                        }
-                        if ($yr.checked) {
-                            drawIntersect(circleYellow, circleRed, null, null, "red");
-                        }
-                        if ($byNotR.checked) {
-                            drawIntersect(circleBlue, circleYellow, null, circleRed, "green");
-                        }
-                        if ($brNotY.checked) {
-                            drawIntersect(circleBlue, circleRed, null, circleYellow, "blue");
-                        }
-                        if ($yrNotB.checked) {
-                            drawIntersect(circleYellow, circleRed, null, circleBlue, "red");
-                        }
-                        if ($yrb.checked) {
-                            drawIntersect(circleYellow, circleRed, circleBlue, null, "black");
-                        }
-                    }
-
-                }); // end $(function(){});
-            </script>
-
+    <script src="public/assets/javascript/index.js"></script>
         </div>
     </div>
-
-
+    </div><!--end venn col-->
+</div> <!--end contents row-->
+</container>
 </body>
 
 </html>
